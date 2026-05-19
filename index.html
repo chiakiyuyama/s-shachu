@@ -158,6 +158,10 @@
       display: flex;
       align-items: flex-start;
     }
+    .hero-title-wrap {
+      position: relative;
+      display: inline-block;
+    }
     .hero-title {
       writing-mode: vertical-rl;
       font-size: clamp(2.2rem, 6vw, 4.5rem);
@@ -166,6 +170,17 @@
       letter-spacing: 0.1em;
       line-height: 1.3;
       text-shadow: 1px 1px 3px rgba(255,255,255,0.2);
+    }
+    .hero-furigana {
+      position: absolute;
+      left: -1.2em;
+      top: 0;
+      writing-mode: vertical-rl;
+      font-size: clamp(0.55rem, 1.2vw, 0.8rem);
+      font-weight: 400;
+      color: rgba(26,18,9,0.7);
+      letter-spacing: 0.55em;
+      white-space: nowrap;
     }
     .hero-subtitle {
       writing-mode: vertical-rl;
@@ -653,7 +668,10 @@
     <div class="hero-content">
       <img src="logo.png" alt="東雲社中ロゴ" class="hero-logo">
       <div class="hero-name">
-        <h1 class="hero-title">東雲社中</h1>
+        <div class="hero-title-wrap">
+          <span class="hero-furigana">しののめしゃちゅう</span>
+          <h1 class="hero-title">東雲社中</h1>
+        </div>
         <span class="hero-subtitle">合同会社</span>
       </div>
     </div>
