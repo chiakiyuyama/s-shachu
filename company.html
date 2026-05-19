@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>会社概要 | 合同会社 東雲社中</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;700;900&family=Shippori+Mincho:wght@400;700;800&display=swap" rel="stylesheet">
+  <style>
+    /* ===== Reset & Base ===== */
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Shippori Mincho', 'Noto Serif JP', serif;
+      color: #333;
+      background: #f5f0eb;
+      overflow-x: hidden;
+    }
+    a { text-decoration: none; color: inherit; }
+
+    /* ===== Header ===== */
+    .header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      background: rgba(26,18,9,0.85);
+      backdrop-filter: blur(8px);
+      padding: 0 5%;
+      height: 70px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      transition: background 0.3s;
+    }
+    .header.scrolled {
+      background: rgba(26,18,9,0.95);
+    }
+    .header-logo {
+      color: #fff;
+      font-size: 1.25rem;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      white-space: nowrap;
+    }
+    .header-nav {
+      display: flex;
+      align-items: center;
+      gap: 32px;
+    }
+    .header-nav a {
+      color: #ccc;
+      font-size: 0.9rem;
+      letter-spacing: 0.1em;
+      transition: color 0.3s;
+      position: relative;
+    }
+    .header-nav a::after {
+      content: '';
+      position: absolute;
+      bottom: -4px;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: #e8a040;
+      transition: width 0.3s;
+    }
+    .header-nav a:hover { color: #fff; }
+    .header-nav a:hover::after { width: 100%; }
+
+    /* ===== Mobile Menu ===== */
+    .hamburger {
+      display: none;
+      background: none;
+      border: none;
+      cursor: pointer;
+      width: 36px;
+      height: 36px;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+    .hamburger span {
+      display: block;
+      width: 24px;
+      height: 2px;
+      background: #fff;
+      transition: 0.3s;
+    }
+    .hamburger.active span:nth-child(1) { transform: translateY(8px) rotate(45deg); }
+    .hamburger.active span:nth-child(2) { opacity: 0; }
+    .hamburger.active span:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
+
+    .mobile-nav {
+      display: none;
+      position: fixed;
+      top: 70px;
+      left: 0;
+      right: 0;
+      background: rgba(26,18,9,0.95);
+      backdrop-filter: blur(8px);
+      padding: 20px 5%;
+      z-index: 999;
+    }
+    .mobile-nav.active { display: block; }
+    .mobile-nav a {
+      display: block;
+      color: #ccc;
+      font-size: 1rem;
+      padding: 14px 0;
+      letter-spacing: 0.1em;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+      transition: color 0.3s;
+    }
+    .mobile-nav a:last-child { border-bottom: none; }
+    .mobile-nav a:hover { color: #e8a040; }
+
+    /* ===== Page Hero ===== */
+    .page-hero {
+      position: relative;
+      width: 100%;
+      height: 350px;
+      background: linear-gradient(135deg, #f5a623 0%, #d4790e 30%, #2a1a0a 70%, #1a1209 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+    .page-hero-bg {
+      position: absolute;
+      inset: 0;
+      background: url('hero.jpg') center/cover no-repeat;
+      opacity: 0.6;
+    }
+    .page-hero::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: rgba(0,0,0,0.4);
+    }
+    .page-hero-content {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      color: #fff;
+    }
+    .page-hero-content h1 {
+      font-size: clamp(2rem, 5vw, 3.2rem);
+      font-weight: 900;
+      letter-spacing: 0.2em;
+      margin-bottom: 12px;
+    }
+    .page-hero-content p {
+      font-size: 1rem;
+      letter-spacing: 0.3em;
+      color: #ddd;
+    }
+
+    /* ===== Breadcrumb ===== */
+    .breadcrumb {
+      background: #faf7f4;
+      border-left: 4px solid #e8a59a;
+      border-right: 4px solid #e8a59a;
+      padding: 16px 5%;
+      font-size: 0.85rem;
+      color: #888;
+    }
+    .breadcrumb a {
+      color: #888;
+      transition: color 0.3s;
+    }
+    .breadcrumb a:hover { color: #e8a040; }
+
+    /* ===== Company Info Section ===== */
+    .company-section {
+      background: #faf7f4;
+      border-left: 4px solid #e8a59a;
+      border-right: 4px solid #e8a59a;
+      padding: 80px 5% 100px;
+    }
+    .company-container {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+    .company-container h2 {
+      font-size: clamp(1.8rem, 3vw, 2.5rem);
+      font-weight: 900;
+      text-align: center;
+      margin-bottom: 60px;
+      letter-spacing: 0.15em;
+    }
+    .info-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    .info-table tr {
+      border-bottom: 1px solid #ddd;
+    }
+    .info-table th,
+    .info-table td {
+      padding: 24px 20px;
+      font-size: 1rem;
+      line-height: 1.8;
+      text-align: left;
+      vertical-align: top;
+    }
+    .info-table th {
+      width: 180px;
+      font-weight: 700;
+      color: #1a1209;
+      letter-spacing: 0.1em;
+      background: rgba(232,165,154,0.08);
+      white-space: nowrap;
+    }
+    .info-table td {
+      color: #444;
+    }
+
+    /* ===== Map Section ===== */
+    .map-section {
+      background: #faf7f4;
+      border-left: 4px solid #e8a59a;
+      border-right: 4px solid #e8a59a;
+      padding: 0 5% 100px;
+    }
+    .map-container {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+    .map-container h3 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      text-align: center;
+      margin-bottom: 30px;
+      letter-spacing: 0.15em;
+    }
+    .map-wrapper {
+      position: relative;
+      width: 100%;
+      padding-bottom: 45%;
+      border-radius: 4px;
+      overflow: hidden;
+    }
+    .map-wrapper iframe {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      border: 0;
+    }
+
+    /* ===== Back Button ===== */
+    .back-section {
+      background: #faf7f4;
+      border-left: 4px solid #e8a59a;
+      border-right: 4px solid #e8a59a;
+      padding: 0 5% 80px;
+      text-align: center;
+    }
+    .btn-back {
+      display: inline-block;
+      background: #1a1a1a;
+      color: #fff;
+      padding: 14px 40px;
+      font-size: 0.95rem;
+      font-family: inherit;
+      letter-spacing: 0.15em;
+      border: none;
+      cursor: pointer;
+      transition: background 0.3s, transform 0.2s;
+    }
+    .btn-back:hover {
+      background: #333;
+      transform: translateY(-2px);
+    }
+
+    /* ===== Footer ===== */
+    .footer {
+      position: relative;
+      background: url('hero.jpg') center bottom/cover no-repeat;
+      color: #fff;
+      padding: 80px 5% 40px;
+    }
+    .footer::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: rgba(0,0,0,0.7);
+    }
+    .footer-inner {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 40px;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+    .footer-left h3 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 12px;
+      letter-spacing: 0.1em;
+    }
+    .footer-left p {
+      font-size: 0.9rem;
+      color: #ccc;
+      margin-bottom: 20px;
+    }
+    .social-links {
+      display: flex;
+      gap: 16px;
+    }
+    .social-links a {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      border: 1px solid #fff;
+      border-radius: 50%;
+      color: #fff;
+      font-size: 1rem;
+      transition: background 0.3s;
+    }
+    .social-links a:hover { background: rgba(255,255,255,0.2); }
+    .footer-nav {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+    .footer-nav a {
+      color: #ddd;
+      font-size: 0.95rem;
+      letter-spacing: 0.1em;
+      transition: color 0.3s;
+    }
+    .footer-nav a:hover { color: #e8a040; }
+    .footer-nav .indent { padding-left: 20px; font-size: 0.88rem; }
+    .footer-bottom {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      margin-top: 60px;
+      padding-top: 20px;
+      border-top: 1px solid rgba(255,255,255,0.2);
+      font-size: 0.85rem;
+      color: #aaa;
+    }
+
+    /* ===== Fade-in ===== */
+    .fade-in {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.8s ease, transform 0.8s ease;
+    }
+    .fade-in.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ===== Responsive ===== */
+    @media (max-width: 768px) {
+      .header-nav { display: none; }
+      .hamburger { display: flex; }
+      .page-hero { height: 260px; }
+      .info-table th,
+      .info-table td {
+        display: block;
+        width: 100%;
+        padding: 12px 16px;
+      }
+      .info-table th {
+        padding-bottom: 4px;
+        border-bottom: none;
+      }
+      .info-table td {
+        padding-top: 4px;
+      }
+      .map-wrapper { padding-bottom: 70%; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ===== Header ===== -->
+  <header class="header" id="header">
+    <a href="index.html" class="header-logo">合同会社 東雲社中</a>
+    <nav class="header-nav">
+      <a href="index.html">HOME</a>
+      <a href="index.html#shaze">社是</a>
+      <a href="index.html#services">事業一覧</a>
+      <a href="company.html">会社概要</a>
+      <a href="index.html#contact">お問い合わせ</a>
+    </nav>
+    <button class="hamburger" id="hamburger" aria-label="メニュー">
+      <span></span><span></span><span></span>
+    </button>
+  </header>
+  <nav class="mobile-nav" id="mobileNav">
+    <a href="index.html">HOME</a>
+    <a href="index.html#shaze">社是</a>
+    <a href="index.html#services">事業一覧</a>
+    <a href="company.html">会社概要</a>
+    <a href="index.html#contact">お問い合わせ</a>
+  </nav>
+
+  <!-- ===== Page Hero ===== -->
+  <section class="page-hero">
+    <div class="page-hero-bg"></div>
+    <div class="page-hero-content">
+      <h1>会社概要</h1>
+      <p>COMPANY</p>
+    </div>
+  </section>
+
+  <!-- ===== Breadcrumb ===== -->
+  <div class="breadcrumb">
+    <a href="index.html">HOME</a> &gt; 会社概要
+  </div>
+
+  <!-- ===== Company Info ===== -->
+  <section class="company-section">
+    <div class="company-container fade-in">
+      <h2>会社概要</h2>
+      <table class="info-table">
+        <tr>
+          <th>名称</th>
+          <td>合同会社 東雲社中(しののめしゃちゅう) 
+          </td>
+        </tr>
+        <tr>
+          <th>創業</th>
+          <td>2026年（令和8年）6月</td>
+        </tr>
+        <tr>
+          <th>資本金</th>
+          <td>5円（御縁）</td>
+        </tr>
+        <tr>
+          <th>代表者</th>
+          <td>代表社員 藤原雅人</td>
+        </tr>
+        <tr>
+          <th>事業内容</th>
+          <td>
+            各業種のコンサルティング提案<br>
+            空き家・空き地の利用活用提案<br>
+            地域活性化支援、過疎化改善事業<br>
+            地場産品の販売・委託・促進事業<br>
+            相続診断・相談、生前整理<br>
+            地域コミュニティ再構築と移住サポート事業<br>
+            ドローンによるインフラ点検、一次産業等 事業活性化・効率化支援事業<br>
+            その他関連する一切の事業
+          </td>
+        </tr>
+        <tr>
+          <th>所在地</th>
+          <td>〒670-0984<br>兵庫県姫路市町坪94-10</td>
+        </tr>
+      </table>
+    </div>
+  </section>
+
+  <!-- ===== Map ===== -->
+  <section class="map-section">
+    <div class="map-container fade-in">
+      <div class="map-wrapper">
+        <iframe
+          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3275.380650096383!2d134.6596336523926!3d34.82152078879486!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3554e100e86de2bd%3A0xdf17fef334f3de80!2z44CSNjcwLTA5ODQg5YW15bqr55yM5aer6Lev5biC55S65Z2q77yZ77yU4oiS77yR77yQ!5e0!3m2!1sja!2sjp!4v1779177327204!5m2!1sja!2sjp"
+          style="border:0;"
+          allowfullscreen=""
+          loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade">
+        </iframe>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Back ===== -->
+  <div class="back-section">
+    <a href="index.html" class="btn-back">TOPに戻る</a>
+  </div>
+
+  <!-- ===== Footer ===== -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-left">
+        <h3>合同会社 東雲社中</h3>
+        <p>〒670-0971 兵庫県姫路市西延末280</p>
+        <div class="social-links">
+          <a href="https://www.facebook.com/p/%E6%9D%B1%E9%9B%B2%E7%A4%BE%E4%B8%AD-61558490635534/" target="_blank" aria-label="Facebook">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+          </a>
+          <a href="https://www.instagram.com/fumantari/" target="_blank" aria-label="Instagram">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+          </a>
+        </div>
+      </div>
+      <div class="footer-nav">
+        <a href="index.html">HOME</a>
+        <a href="index.html#shaze">社是</a>
+        <a href="index.html#services">事業一覧</a>
+        <a href="company.html">会社概要</a>
+        <a href="index.html#contact">お問い合わせ</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      &copy; 2026 合同会社 東雲社中
+    </div>
+  </footer>
+
+  <!-- ===== Script ===== -->
+  <script>
+    // Hamburger menu toggle
+    const hamburger = document.getElementById('hamburger');
+    const mobileNav = document.getElementById('mobileNav');
+    hamburger.addEventListener('click', () => {
+      hamburger.classList.toggle('active');
+      mobileNav.classList.toggle('active');
+    });
+    mobileNav.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => {
+        hamburger.classList.remove('active');
+        mobileNav.classList.remove('active');
+      });
+    });
+
+    // Header scroll effect
+    window.addEventListener('scroll', () => {
+      document.getElementById('header').classList.toggle('scrolled', window.scrollY > 50);
+    });
+
+    // Fade-in on scroll
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) entry.target.classList.add('visible');
+      });
+    }, { threshold: 0.15 });
+    document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+  </script>
+</body>
+</html>
