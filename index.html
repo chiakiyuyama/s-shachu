@@ -7,635 +7,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;700;900&family=Shippori+Mincho:wght@400;700;800&display=swap" rel="stylesheet">
-  <style>
-    /* ===== Reset & Base ===== */
-    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-    html { scroll-behavior: smooth; }
-    body {
-      font-family: 'Shippori Mincho', 'Noto Serif JP', serif;
-      color: #333;
-      background: #f5f0eb;
-      overflow-x: hidden;
-    }
-    a { text-decoration: none; color: inherit; }
-    img { max-width: 100%; display: block; }
-
-    /* ===== Header ===== */
-    .header {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      z-index: 1000;
-      background: rgba(26,18,9,0.85);
-      backdrop-filter: blur(8px);
-      padding: 0 5%;
-      height: 70px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      transition: background 0.3s;
-    }
-    .header.scrolled {
-      background: rgba(26,18,9,0.95);
-    }
-    .header-logo {
-      color: #fff;
-      font-size: 1.25rem;
-      font-weight: 700;
-      letter-spacing: 0.15em;
-      white-space: nowrap;
-    }
-    .header-nav {
-      display: flex;
-      align-items: center;
-      gap: 32px;
-    }
-    .header-nav a {
-      color: #ccc;
-      font-size: 0.9rem;
-      letter-spacing: 0.1em;
-      transition: color 0.3s;
-      position: relative;
-    }
-    .header-nav a::after {
-      content: '';
-      position: absolute;
-      bottom: -4px;
-      left: 0;
-      width: 0;
-      height: 2px;
-      background: #e8a040;
-      transition: width 0.3s;
-    }
-    .header-nav a:hover { color: #fff; }
-    .header-nav a:hover::after { width: 100%; }
-
-    /* ===== Mobile Menu ===== */
-    .hamburger {
-      display: none;
-      background: none;
-      border: none;
-      cursor: pointer;
-      width: 36px;
-      height: 36px;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 6px;
-    }
-    .hamburger span {
-      display: block;
-      width: 24px;
-      height: 2px;
-      background: #fff;
-      transition: 0.3s;
-    }
-    .hamburger.active span:nth-child(1) { transform: translateY(8px) rotate(45deg); }
-    .hamburger.active span:nth-child(2) { opacity: 0; }
-    .hamburger.active span:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
-
-    .mobile-nav {
-      display: none;
-      position: fixed;
-      top: 70px;
-      left: 0;
-      right: 0;
-      background: rgba(26,18,9,0.95);
-      backdrop-filter: blur(8px);
-      padding: 20px 5%;
-      z-index: 999;
-    }
-    .mobile-nav.active { display: block; }
-    .mobile-nav a {
-      display: block;
-      color: #ccc;
-      font-size: 1rem;
-      padding: 14px 0;
-      letter-spacing: 0.1em;
-      border-bottom: 1px solid rgba(255,255,255,0.1);
-      transition: color 0.3s;
-    }
-    .mobile-nav a:last-child { border-bottom: none; }
-    .mobile-nav a:hover { color: #e8a040; }
-
-    /* ===== Hero Section ===== */
-    .hero {
-      position: relative;
-      width: 100%;
-      height: 100vh;
-      min-height: 600px;
-      background: linear-gradient(135deg, #f5a623 0%, #d4790e 30%, #2a1a0a 70%, #1a1209 100%);
-      display: flex;
-      align-items: center;
-      overflow: hidden;
-    }
-    .hero-bg {
-      position: absolute;
-      inset: 0;
-      background: url('hero.jpg') center/cover no-repeat;
-      opacity: 0.7;
-    }
-    .hero-overlay {
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(to right, rgba(245,166,35,0.5) 0%, rgba(0,0,0,0.2) 50%, rgba(0,0,0,0.5) 100%);
-    }
-    .hero-content {
-      position: relative;
-      z-index: 2;
-      padding-left: 10%;
-      display: flex;
-      flex-direction: column;
-      align-items: flex-start;
-    }
-    .hero-logo {
-      width: clamp(80px, 12vw, 150px);
-      height: auto;
-      margin-bottom: 16px;
-    }
-    .hero-name {
-      display: flex;
-      align-items: flex-start;
-    }
-    .hero-title-wrap {
-      position: relative;
-      display: inline-block;
-    }
-    .hero-title {
-      writing-mode: vertical-rl;
-      font-size: clamp(2.2rem, 6vw, 4.5rem);
-      font-weight: 900;
-      color: #1a1209;
-      letter-spacing: 0.1em;
-      line-height: 1.3;
-      text-shadow: 1px 1px 3px rgba(255,255,255,0.2);
-    }
-    .hero-furigana {
-      position: absolute;
-      left: -1.2em;
-      top: 0;
-      writing-mode: vertical-rl;
-      font-size: clamp(0.55rem, 1.2vw, 0.8rem);
-      font-weight: 400;
-      color: rgba(26,18,9,0.7);
-      letter-spacing: 0.55em;
-      white-space: nowrap;
-    }
-    .hero-subtitle {
-      writing-mode: vertical-rl;
-      font-size: clamp(1.1rem, 2.5vw, 1.8rem);
-      font-weight: 700;
-      color: #1a1209;
-      letter-spacing: 0.2em;
-      margin-top: 10px;
-    }
-    .scroll-indicator {
-      position: absolute;
-      bottom: 40px;
-      left: 50%;
-      transform: translateX(-50%);
-      z-index: 2;
-      color: #fff;
-      font-size: 0.85rem;
-      letter-spacing: 4px;
-      text-align: center;
-    }
-    .scroll-indicator::after {
-      content: '';
-      display: block;
-      width: 1px;
-      height: 50px;
-      background: #fff;
-      margin: 10px auto 0;
-      animation: scrollDown 1.5s infinite;
-    }
-    @keyframes scrollDown {
-      0% { opacity: 1; transform: scaleY(1); }
-      50% { opacity: 0.5; }
-      100% { opacity: 0; transform: scaleY(0); transform-origin: top; }
-    }
-
-    /* ===== Section Commons ===== */
-    .section-light {
-      background: #faf7f4;
-      border-left: 4px solid #e8a59a;
-      border-right: 4px solid #e8a59a;
-    }
-    .section-padding {
-      padding: 100px 5% 100px;
-    }
-    .section-title {
-      text-align: center;
-      font-size: clamp(2rem, 4vw, 3rem);
-      font-weight: 900;
-      margin-bottom: 20px;
-      letter-spacing: 0.15em;
-    }
-    .section-subtitle {
-      text-align: center;
-      font-size: 1.1rem;
-      color: #666;
-      letter-spacing: 0.3em;
-      margin-bottom: 60px;
-    }
-
-    /* ===== 社是 Section ===== */
-    .shaze {
-      background: #faf7f4;
-      border-left: 4px solid #e8a59a;
-      border-right: 4px solid #e8a59a;
-      padding: 100px 5%;
-      text-align: center;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-    }
-    .shaze h2 {
-      font-size: clamp(1.6rem, 4vw, 3.2rem);
-      font-weight: 900;
-      margin-bottom: clamp(24px, 4vw, 60px);
-      letter-spacing: 0.2em;
-    }
-    .shaze-items {
-      display: flex;
-      justify-content: center;
-      gap: clamp(10px, 3vw, 80px);
-      flex-wrap: nowrap;
-      direction: rtl;
-    }
-    .shaze-item {
-      writing-mode: vertical-rl;
-      text-align: left;
-      direction: ltr;
-    }
-    .shaze-item .number {
-      font-size: clamp(0.95rem, 1.5vw, 1.3rem);
-      font-weight: 700;
-      display: block;
-      margin-bottom: clamp(4px, 1vw, 12px);
-    }
-    .shaze-item .main-text {
-      font-size: clamp(1.1rem, 1.8vw, 1.5rem);
-      font-weight: 700;
-      display: block;
-      margin-bottom: clamp(4px, 1vw, 12px);
-    }
-    .shaze-item .sub-text {
-      font-size: clamp(0.85rem, 1.2vw, 1rem);
-      color: #555;
-      display: block;
-    }
-    .never-give-up {
-      margin-top: clamp(30px, 5vw, 80px);
-      font-size: clamp(0.9rem, 2.5vw, 1.8rem);
-      letter-spacing: 0.5em;
-      color: #333;
-    }
-
-    /* ===== 事業内容 Section ===== */
-    .business-intro {
-      background: #faf7f4;
-      border-left: 4px solid #e8a59a;
-      border-right: 4px solid #e8a59a;
-      padding: 100px 5% 40px;
-      text-align: center;
-    }
-    .business-toc {
-      position: relative;
-      background: url('hero.jpg') center/cover no-repeat;
-      min-height: 500px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 80px 5%;
-    }
-    .business-toc::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: rgba(0,0,0,0.55);
-    }
-    .business-toc-content {
-      position: relative;
-      z-index: 1;
-      color: #fff;
-      text-align: center;
-    }
-    .business-toc-content h3 {
-      font-size: 1.8rem;
-      font-weight: 700;
-      margin-bottom: 50px;
-      letter-spacing: 0.2em;
-    }
-    .toc-items {
-      display: flex;
-      justify-content: center;
-      gap: clamp(20px, 3vw, 60px);
-      flex-wrap: wrap;
-      direction: rtl;
-    }
-    .toc-item {
-      writing-mode: vertical-rl;
-      direction: ltr;
-      font-size: 1.05rem;
-      line-height: 1.8;
-      text-align: left;
-      letter-spacing: 0.05em;
-    }
-
-    /* ===== Service Cards ===== */
-    .service-cards {
-      background: #faf7f4;
-      border-left: 4px solid #e8a59a;
-      border-right: 4px solid #e8a59a;
-      padding: 80px 5%;
-    }
-    .service-card {
-      display: flex;
-      align-items: center;
-      gap: 40px;
-      max-width: 900px;
-      margin: 0 auto 80px;
-    }
-    .service-card:last-child { margin-bottom: 0; }
-    .service-card-img {
-      flex: 0 0 50%;
-      max-width: 400px;
-      border-radius: 4px;
-      overflow: hidden;
-    }
-    .service-card-img img {
-      width: 100%;
-      height: 280px;
-      object-fit: cover;
-      transition: transform 0.5s;
-    }
-    .service-card-img:hover img { transform: scale(1.05); }
-    .service-card-body {
-      flex: 1;
-    }
-    .service-card-body h3 {
-      font-size: 1.6rem;
-      font-weight: 700;
-      margin-bottom: 24px;
-      letter-spacing: 0.1em;
-    }
-    .btn-black {
-      display: inline-block;
-      background: #1a1a1a;
-      color: #fff;
-      padding: 14px 36px;
-      font-size: 0.95rem;
-      font-family: inherit;
-      letter-spacing: 0.15em;
-      border: none;
-      cursor: pointer;
-      transition: background 0.3s, transform 0.2s;
-    }
-    .btn-black:hover {
-      background: #333;
-      transform: translateY(-2px);
-    }
-
-    /* ===== 事業一覧 Section ===== */
-    .business-list {
-      background: #faf7f4;
-      border-left: 4px solid #e8a59a;
-      border-right: 4px solid #e8a59a;
-      padding: 100px 5%;
-    }
-    .business-list h2 {
-      text-align: center;
-      font-size: clamp(2rem, 4vw, 3rem);
-      font-weight: 900;
-      margin-bottom: 60px;
-      letter-spacing: 0.15em;
-    }
-    .business-list-items {
-      max-width: 1100px;
-      margin: 0 auto;
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 40px 50px;
-    }
-    .business-list-item {
-      text-align: center;
-    }
-    .business-list-item img {
-      width: 100%;
-      height: 220px;
-      object-fit: cover;
-      margin: 0 auto 16px;
-      border-radius: 4px;
-    }
-    .business-list-item h4 {
-      font-size: 1.15rem;
-      font-weight: 700;
-      margin-bottom: 6px;
-    }
-    .business-list-item p {
-      font-size: 0.9rem;
-      color: #666;
-    }
-
-    /* ===== CTA Section ===== */
-    .cta {
-      position: relative;
-      background: url('hero.jpg') center/cover no-repeat;
-      padding: 100px 12%;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      flex-wrap: wrap;
-      gap: 40px;
-    }
-    .cta::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: rgba(0,0,0,0.5);
-    }
-    .cta-text {
-      position: relative;
-      z-index: 1;
-      color: #fff;
-    }
-    .cta-text h2 {
-      font-size: clamp(1.5rem, 3vw, 2.2rem);
-      font-weight: 700;
-      line-height: 1.7;
-      letter-spacing: 0.1em;
-    }
-    .cta-button {
-      position: relative;
-      z-index: 1;
-    }
-    .btn-white {
-      display: inline-block;
-      background: #fff;
-      color: #333;
-      padding: 18px 40px;
-      font-size: 1rem;
-      font-weight: 700;
-      font-family: inherit;
-      letter-spacing: 0.15em;
-      border: none;
-      cursor: pointer;
-      transition: background 0.3s, transform 0.2s;
-    }
-    .btn-white:hover {
-      background: #f0f0f0;
-      transform: translateY(-2px);
-    }
-
-    /* ===== 会社概要 Section ===== */
-    .company {
-      background: #faf7f4;
-      border-left: 4px solid #e8a59a;
-      border-right: 4px solid #e8a59a;
-      padding: 100px 5%;
-    }
-    .company-inner {
-      display: flex;
-      align-items: center;
-      gap: 60px;
-      max-width: 1000px;
-      margin: 0 auto;
-      flex-wrap: wrap;
-    }
-    .company-text {
-      flex: 1;
-      min-width: 280px;
-    }
-    .company-text h2 {
-      font-size: clamp(2rem, 4vw, 3rem);
-      font-weight: 900;
-      margin-bottom: 30px;
-      letter-spacing: 0.15em;
-    }
-    .company-img {
-      flex: 1.5;
-      min-width: 300px;
-    }
-    .company-img img {
-      width: 100%;
-      height: 280px;
-      object-fit: cover;
-      border-radius: 4px;
-    }
-
-    /* ===== Footer ===== */
-    .footer {
-      position: relative;
-      background: url('hero.jpg') center bottom/cover no-repeat;
-      color: #fff;
-      padding: 80px 5% 40px;
-    }
-    .footer::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: rgba(0,0,0,0.7);
-    }
-    .footer-inner {
-      position: relative;
-      z-index: 1;
-      display: flex;
-      justify-content: space-between;
-      flex-wrap: wrap;
-      gap: 40px;
-      max-width: 1100px;
-      margin: 0 auto;
-    }
-    .footer-left h3 {
-      font-size: 1.5rem;
-      font-weight: 700;
-      margin-bottom: 12px;
-      letter-spacing: 0.1em;
-    }
-    .footer-left p {
-      font-size: 0.9rem;
-      color: #ccc;
-      margin-bottom: 20px;
-    }
-    .social-links {
-      display: flex;
-      gap: 16px;
-    }
-    .social-links a {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 40px;
-      height: 40px;
-      border: 1px solid #fff;
-      border-radius: 50%;
-      color: #fff;
-      font-size: 1rem;
-      transition: background 0.3s;
-    }
-    .social-links a:hover {
-      background: rgba(255,255,255,0.2);
-    }
-    .footer-nav {
-      display: flex;
-      flex-direction: column;
-      gap: 14px;
-    }
-    .footer-nav a {
-      color: #ddd;
-      font-size: 0.95rem;
-      letter-spacing: 0.1em;
-      transition: color 0.3s;
-    }
-    .footer-nav a:hover { color: #e8a040; }
-    .footer-nav .indent { padding-left: 20px; font-size: 0.88rem; }
-    .footer-bottom {
-      position: relative;
-      z-index: 1;
-      text-align: center;
-      margin-top: 60px;
-      padding-top: 20px;
-      border-top: 1px solid rgba(255,255,255,0.2);
-      font-size: 0.85rem;
-      color: #aaa;
-    }
-
-    /* ===== Responsive ===== */
-    @media (max-width: 768px) {
-      .header-nav { display: none; }
-      .hamburger { display: flex; }
-      .hero-content { padding-left: 5%; }
-      .hero-title { font-size: 3rem; }
-      .hero-subtitle { font-size: 1.3rem; }
-      .shaze { padding: 60px 3%; }
-      .service-card {
-        flex-direction: column;
-        text-align: center;
-      }
-      .service-card-img { max-width: 100%; flex: auto; }
-      .business-list-items { grid-template-columns: 1fr; }
-      .company-inner { flex-direction: column; }
-      .cta { justify-content: center; text-align: center; }
-      .toc-items { gap: 15px; }
-      .toc-item { font-size: 0.9rem; }
-    }
-
-    /* ===== Fade-in Animation ===== */
-    .fade-in {
-      opacity: 0;
-      transform: translateY(30px);
-      transition: opacity 0.8s ease, transform 0.8s ease;
-    }
-    .fade-in.visible {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  </style>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
@@ -676,6 +48,77 @@
       </div>
     </div>
     <div class="scroll-indicator">SCROLL</div>
+  </section>
+
+  <!-- ===== 経営理念 ===== -->
+  <section class="philosophy" id="philosophy">
+    <div class="philosophy-header fade-in">
+      <h2>経営理念</h2>
+      <p>PHILOSOPHY</p>
+    </div>
+
+    <!-- 経営理念 -->
+    <div class="philosophy-block fade-in">
+      <h3>経営理念</h3>
+      <p class="philosophy-block-sub">MISSION</p>
+      <div class="philosophy-text">
+        <p><span class="label">理を心に。</span><br>「今あるもの」に萬足し、「今あること」に感謝。</p>
+        <p><span class="label">念を頭に。</span><br>現場のニーズから事業を発想し、自らの強みが発揮できる舞台を造る。</p>
+      </div>
+    </div>
+
+    <!-- 経営目標 -->
+    <div class="philosophy-block fade-in">
+      <h3>経営目標</h3>
+      <p class="philosophy-block-sub">VISION</p>
+      <ul class="philosophy-items">
+        <li><span class="num">一、</span>何を為すかよりも何で在るかを常に問う。</li>
+        <li><span class="num">二、</span>「誰かの為に」を考え、社会の困りごとを解決してゆく。</li>
+        <li><span class="num">三、</span>自社・取引先・お客様の「三方良し」で。</li>
+      </ul>
+    </div>
+
+    <!-- 行動指針 -->
+    <div class="philosophy-block fade-in">
+      <h3>行動指針</h3>
+      <p class="philosophy-block-sub">VALUES</p>
+      <ul class="philosophy-items">
+        <li><span class="num">一、</span>「誠実さ」で勝負し、グレーゾーンは絶対避ける。</li>
+        <li><span class="num">二、</span>「地味」をアピールし、「足ルヲ知ル」行動を。</li>
+        <li><span class="num">三、</span>関わってくれる全ての人に感謝し、その応援団となる。</li>
+      </ul>
+    </div>
+
+    <!-- 地方創生 + 代表メッセージ -->
+    <div class="sousei fade-in">
+      <div class="sousei-inner">
+        <!-- 代表メッセージ -->
+        <div class="message">
+          <div class="message-heading">
+            <h4>地方創生<span class="highlight">「支援」</span>企業</h4>
+          </div>
+          <p class="message-company">合同会社 東雲社中</p>
+
+          <p class="message-body">
+            代表 藤原の志（こころざし）
+          </p>
+
+          <p class="motto-label">座右の銘</p>
+          <div class="motto-wrap">
+            <div class="motto-card">
+              <p class="motto-main">「吾唯知足」</p>
+              <p class="motto-reading">‐ワレ・タダ・タルヲシル‐</p>
+              <p class="motto-sub">「今あるもの」を武器とせよ</p>
+            </div>
+            <div class="motto-card">
+              <p class="motto-main">「継続は、力なり」</p>
+              <p class="motto-reading">‐ケイゾクハ・チカラナリ‐</p>
+              <p class="motto-sub">最も強いものが生き残るのではなく、<br>最も賢いものが生き残る</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </section>
 
   <!-- ===== 社是 ===== -->
