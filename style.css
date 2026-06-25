@@ -558,6 +558,22 @@ img { max-width: 100%; display: block; }
   color: #444;
   margin-bottom: 50px;
 }
+.service-photos {
+  display: flex;
+  gap: 16px;
+  margin-top: 40px;
+  max-width: 960px;
+  margin-left: auto;
+  margin-right: auto;
+}
+.service-photos img {
+  flex: 1;
+  min-width: 0;
+  height: 220px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
 .service-detail-cta {
   text-align: center;
   margin-top: 50px;
@@ -605,6 +621,8 @@ img { max-width: 100%; display: block; }
     flex-direction: column;
   }
   .service-section-img { flex: auto; width: 100%; }
+  .service-photos { gap: 8px; }
+  .service-photos img { height: 140px; border-radius: 6px; }
 }
 
 /* ===== Modal ===== */
